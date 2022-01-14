@@ -35,3 +35,5 @@ vim.o.cursorline = true
 vim.o.pumheight = 15
 
 vim.g.tex_flavor = 'latex'
+
+vim.o.undofile = true

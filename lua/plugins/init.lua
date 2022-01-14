@@ -70,7 +70,7 @@ local setup = function(use)
     use {
         'L3MON4D3/LuaSnip',
         config = p 'luasnip',
-        requires = { 'rafamadriz/friendly-snippets' },
+        requires = { 'rafamadriz/friendly-snippets' }, -- not yet used
     }
 
     use {
@@ -87,6 +87,14 @@ local setup = function(use)
             'f3fora/cmp-spell',
         },
         config = p 'nvim-cmp',
+    }
+
+    use {
+        'glepnir/lspsaga.nvim', config = p 'lspsaga',
+    }
+
+    use {
+        'folke/trouble.nvim', config = p 'trouble'
     }
 
     -- Which key on bottom requires other plugins to be loaded already.

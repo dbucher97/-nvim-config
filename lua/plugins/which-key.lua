@@ -26,6 +26,10 @@ wk.register({
     [']'] = 'Next',
     ['gnn'] = 'Treesitter scope selection',
 }, {})
+wk.register({
+    ['<ScrollWheelUp>'] = {'<C-y>', 'which_key_ignore'},
+    ['<ScrollWheelDown>'] = {'<C-e>', 'which_key_ignore'},
+}, {mode = 'n'})
 
 wk.register({
     ['<m-h>'] = { '<cmd>KittyNavigateLeft<cr>', 'Goto window left' },
@@ -62,6 +66,7 @@ wk.register({
     ['?'] = { '<cmd>WhichKey<cr>', 'Open WhichKey' },
     ['.'] = { '<cmd>Telescope find_files<cr>', 'Find File' },
     [','] = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
+    ['+'] = { '<cmd>TroubleToggle<cr>', 'Toggle Trouble'},
     ['<Tab>'] = { '<cmd>b#<cr>', 'Last Buffer' },
     f = {
         name = 'Find/File',
@@ -101,24 +106,22 @@ wk.register({
         a = { '<cmd>lua vim.lsp.buf.code_action()<CR>', "Code action" },
         f = { '<cmd>lua vim.lsp.buf.formatting()<CR>', "Code action" },
         e = { '<cmd>lua vim.lsp.diagnostic.open_float()<CR>', "Open Diagnostics" },
-        q = { '<cmd>lua vim.lsp.diagnostic.setloclist()<CR>', "Set local list" },
+        q = { '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', "Open location list" },
         w = {
             name = "workspace",
             a = { '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', 'Add workspace folder'},
             r = { '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', 'Remove workspace folder'},
             l = { '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', 'List workspace folders'},
-        }
+        },
+        x = { '<cmd>TroubleToggle<cr>', 'Toggle Trouble'},
     },
 }, { prefix = '<leader>' })
 
 
---   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
---   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
---   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-
 
 --------------------------------------------------------------------------------
 -- Just descritpions
+-- surround
 wk.register({
     ['cs'] = 'Change surroundings',
     ['cq'] = { 'cs\'"', 'Single quotes to double quotes' },
@@ -127,6 +130,7 @@ wk.register({
     ['ys'] = 'Add surroundings',
     ['yss'] = 'Add surroundings to line',
 }, {})
+
 
 --------------------------------------------------------------------------------
 -- File Type spceific bindings
@@ -171,9 +175,27 @@ _G.registerNvimTree = function()
     }, {})
 end
 
+_G.registerTrouble = function()
+    local buf = vim.api.nvim_get_current_buf()
+    require('which-key').register({
+        ["<c-t>"] = { 'Open in new tab', buffer = buf },
+        ["<c-x>"] = { 'Open in horizontal split', buffer = buf },
+        ["<c-v>"] = { 'Open in vertical split', buffer = buf },
+        ["<tab>"] = { 'Open/Toggle fold', buffer = buf },
+        m = { 'Toggle mode', buffer = buf },
+        o = { 'Jump and quit', buffer = buf },
+        p = { 'Preview', buffer = buf },
+        P = { 'Toggle preview', buffer = buf },
+        q = { 'Quit', buffer = buf },
+        r = { 'Refresh', buffer = buf },
+        ["<cr>"] = { 'Jump', buffer = buf },
+    }, {})
+end
+
 vim.cmd [[
 augroup WhichKeyFT
 autocmd!
 autocmd FileType NvimTree lua registerNvimTree()
+autocmd FileType Trouble lua registerTrouble()
 augroup END
 ]]

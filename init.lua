@@ -12,6 +12,3 @@ autocmd BufWritePost ~/.config/nvim/lua/plugins/*.lua :PackerCompile
 augroup END
 ]]
 
-vim.cmd [[noremap <ScrollWheelUp> <C-Y>]]
-vim.cmd [[noremap <ScrollWheelDown> <C-E>]]
-
